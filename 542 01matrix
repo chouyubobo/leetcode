@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        int a=matrix.size();//行数
+        int b=matrix[0].size();//列数
+        vector<vector<int>>ans(a,vector<int>(b,INT_MAX-1));
+        for(int times=0;times<=1;times++){//循环两次，第一次从左上向右下；第二次从右下向左上
+            for(int i=times?a-1:0;times?i>=0:i<a;times?i--:i++){
+                for(int j=times?b-1:0;times?j>=0:j<b;times?j--:j++){
+                    if(matrix[i][j]==0){
+                        ans[i][j]=0;
+                    }else{
+                        if(j-1>=0&&ans[i][j-1]!=INT_MAX-1&&ans[i][j]>ans[i][j-1]+1){//向左
+                            ans[i][j]=ans[i][j-1]+1;
+                        }
+                        if(j+1<b&&ans[i][j+1]!=INT_MAX-1&&ans[i][j]>ans[i][j+1]){//向右
+                            ans[i][j]=ans[i][j+1]+1;
+                        }
+                        if(i-1>=0&&ans[i-1][j]!=INT_MAX-1&&ans[i][j]>ans[i-1][j]+1){//向上
+                            ans[i][j]=ans[i-1][j]+1;
+                        }
+                        if(i+1<a&&ans[i+1][j]!=INT_MAX-1&&ans[i][j]>ans[i+1][j]+1){//向下
+                            ans[i][j]=ans[i+1][j]+1;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
