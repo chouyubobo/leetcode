@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        int max_depth=0,depth=0;
+        int leftmost_val=root->val;
+        find(root,max_depth,depth,leftmost_val);
+        return leftmost_val;
+    }
+    void find(TreeNode*node,int&maxdepth,int depth,int&leftmostval){
+        //maxdepth是对max_depth的引用，每次depth大于maxdepth都会修改maxdepth的值
+        if(node==NULL)return;
+        find(node->left,maxdepth,depth+1,leftmostval);
+        find(node->right,maxdepth,depth+1,leftmostval);
+        if(depth>maxdepth){//该判断只在n+1层的最左端节点为true
+            maxdepth=depth;
+            leftmostval=node->val;
+        }
+        
+    }
+};
