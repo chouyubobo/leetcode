@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int>ans;
+        
+        queue<TreeNode*> q;//节点的指针队列
+        queue<int> level;  //节点的层次队列（两个队列一一对应）
+        
+        if(root==NULL)return ans;//空树
+        
+        //非空树的初始化
+        q.push(root);
+        level.push(0);
+        int x=-1;
+            
+        while(q.size()){
+            TreeNode* node=q.front();
+            q.pop();
+            int lev=level.front();
+            level.pop();
+            if(node->left){
+                q.push(node->left);
+                level.push(lev+1);
+            }
+            if(node->right){
+                q.push(node->right);
+                level.push(lev+1);
+            }
+            if(lev>x){
+                x=lev;
+                ans.push_back(node->val);
+            }else{
+                ans[x]=max(ans[x],node->val);
+            }
+        }
+        return ans;  
+    }
+};
