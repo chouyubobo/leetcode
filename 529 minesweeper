@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        if(board[click[0]][click[1]]=='M'){//如果点到M，改为X并返回board
+            board[click[0]][click[1]]='X';
+            return board;
+        }
+        //采用dfs搜索周边节点
+        dfs(click[0],click[1],board);
+        return board;
+    }
+    
+    //dfs相关结点
+    vector<vector<char>>dfs(int x,int y,vector<vector<char>>&board){
+        if(board[x][y]!='E'){
+            return board;
+        }else{
+            detect(x,y,board);
+        }
+        if(board[x][y]=='B'){
+            for(int i=-1;i<=1;i++){
+                for(int j=-1;j<=1;j++){
+                    if(x+i>=0&&y+j>=0&&x+i<board.size()&&y+j<board[0].size()&&abs(i)+abs(j)!=0){
+                        dfs(x+i,y+j,board);
+                    }
+                }
+            }
+        }
+        return board;
+    }
+    
+    //确定每个结点周边mine情况
+    void detect(int x,int y,vector<vector<char>>&board){
+        int count=0;//记录该点周边mine数
+        //判断该点周边九个位置mine情况
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                if(x+i>=0&&y+j>=0&&x+i<board.size()&&y+j<board[0].size()&&abs(i)+abs(j)!=0){
+                    if(board[x+i][y+j]=='M')count++;
+                }
+            }
+        }
+        if(count==0){
+            board[x][y]='B';
+        }else{
+            board[x][y]='0'+count;
+        }
+    }
+};
