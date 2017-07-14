@@ -4,4 +4,4 @@
 * ### #542 01matrix（dp）
 * ### #513 Find Bottom Left Tree Value（递归）
 * ### #515 Find Largest Value In Each Tree Row（bfs 队列）
-* ### #529 minesweeper（dfs 有待改进）
+* ### #529 minesweeper（dfs和bfs 有待改进）
