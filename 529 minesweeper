@@ -1,3 +1,4 @@
+dfs:
 class Solution {
 public:
     vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
@@ -30,6 +31,71 @@ public:
     }
     
     //确定每个结点周边mine情况
+    void detect(int x,int y,vector<vector<char>>&board){
+        int count=0;//记录该点周边mine数
+        //判断该点周边九个位置mine情况
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                if(x+i>=0&&y+j>=0&&x+i<board.size()&&y+j<board[0].size()&&abs(i)+abs(j)!=0){
+                    if(board[x+i][y+j]=='M')count++;
+                }
+            }
+        }
+        if(count==0){
+            board[x][y]='B';
+        }else{
+            board[x][y]='0'+count;
+        }
+    }
+};
+=============================================================================================================================
+bfs:
+class Solution {
+public:
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        if(board[click[0]][click[1]]=='M'){//如果点到M，改为X并返回board
+            board[click[0]][click[1]]='X';
+            return board;
+        }
+        //采用bfs搜索周边节点
+        if(board[click[0]][click[1]]=='E'){//本身为E，detect后为B的会进入队列bfs
+            detect(click[0],click[1],board);
+            if(board[click[0]][click[1]]=='B'){
+                vector<vector<bool>>flag(50,vector<bool>(50,false));//flag防止某结点多次进入队列
+                queue<pair<int,int>>tmp;
+                tmp.push(make_pair(click[0],click[1]));
+                flag[click[0]][click[1]]=true;
+                bfs(board,tmp,flag);
+            }
+        }
+        return board;
+    }
+    
+    //bfs相关结点
+    vector<vector<char>>bfs(vector<vector<char>>&board,queue<pair<int,int>>&tmp,vector<vector<bool>>&flag){
+        while(tmp.size()){
+            pair<int,int>b=tmp.front();
+            tmp.pop();
+            int x=b.first,y=b.second;
+            for(int i=-1;i<=1;i++){
+                for(int j=-1;j<=1;j++){
+                    if(x+i>=0&&y+j>=0&&x+i<board.size()&&y+j<board[0].size()&&abs(i)+abs(j)!=0){
+                        if(board[x+i][y+j]=='E'){//本身为E，detect后为B的会进入队列bfs
+                            detect(x+i,y+j,board);
+                            if(board[x+i][y+j]=='B'&&!flag[x+i][y+j]){
+                            tmp.push(make_pair(x+i,y+j));
+                            flag[x+i][y+j]=true;
+                        }
+                        bfs(board,tmp,flag);
+                        }
+                    }
+                }
+            }
+        }
+        return board;
+    }
+    
+    //确定每个结点的名称
     void detect(int x,int y,vector<vector<char>>&board){
         int count=0;//记录该点周边mine数
         //判断该点周边九个位置mine情况
