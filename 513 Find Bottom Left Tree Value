@@ -1,3 +1,45 @@
+bfs：
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        int ans;
+        queue<TreeNode*>q;
+        queue<int>level;
+        q.push(root);
+        level.push(0);
+        int x=-1;
+        while(q.size()){
+            TreeNode*node=q.front();
+            q.pop();
+            int lev=level.front();
+            level.pop();
+            if(node->left!=NULL){
+                q.push(node->left);
+                level.push(lev+1);
+            }
+            if(node->right!=NULL){
+                q.push(node->right);
+                level.push(lev+1);
+            }
+            if(lev>x){
+                x=lev;
+                ans=node->val;
+            }
+        }
+        return ans;
+    }
+};
+============================================================================================================================
+递归 from discuss
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
