@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string dict = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    //每次更新两个map
+    map<string,string>L_TO_S;//key=longUrl,value=shortUrl
+    map<string,string>S_TO_L;//key=shortUrl,value=longUrl
+    // Encodes a URL to a shortened URL.
+    string encode(string longUrl) {
+        if(L_TO_S.find(longUrl)!=L_TO_S.end())return L_TO_S[longUrl];//防止一个longUrl产生多个shortUrl,浪费空间
+        string s ="";
+        while(s.size()<6){//随机产生一个六位字符串
+            srand(time(NULL));
+            s=s+dict[rand()%62];
+        }
+        L_TO_S[longUrl]=s;
+        S_TO_L[s]=longUrl;
+        return s;
+        
+    }
+
+    // Decodes a shortened URL to its original URL.
+    string decode(string shortUrl) {
+        if(S_TO_L.find(shortUrl)!=S_TO_L.end())return S_TO_L[shortUrl];
+        string l ="";
+        while(l.size()<6){
+            srand(time(NULL));
+            l=+dict[rand()%62];
+        }
+        L_TO_S[shortUrl]=shortUrl+l;
+        S_TO_L[shortUrl+l]=shortUrl;
+        return l;
+    }
+};
+
+// Your Solution object will be instantiated and called as such:
+// Solution solution;
+// solution.decode(solution.encode(url));
