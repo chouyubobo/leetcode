@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<vector<string>> findDuplicate(vector<string>& paths) {
+        map<string,vector<string>>c_f;//<内容，路径>
+        vector<vector<string>>ans;
+        for(int i=0;i<paths.size();i++){
+            stringstream stream;
+            stream.str(paths[i]);
+            string root,str,path,content;
+            stream>>root;
+            while(stream>>str){
+                //substr(a,b)从第a（从0计数）个位置开始，取b个字符
+                path=root+'/'+str.substr(0,str.find("("));
+                //find（char ch）返回ch第一次出现的位置
+                content=str.substr(str.find("(")+1,str.find(")")-str.find("(")-1);
+                c_f[content].push_back(path);
+            }
+        }
+        //遍历c_f
+        for(auto f:c_f){
+            if(f.second.size()>1){//duplicate
+                ans.push_back(f.second); 
+            }  
+        }
+        return ans;
+    }
+};
