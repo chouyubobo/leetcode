@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        map<int,int>tmp;//<SubTreeSum,count>
+        vector<int>ans;
+        findSum(root,tmp);//调用函数，记录每一个结点的SubTreeValue
+        int max=0;
+        for(auto p:tmp){//遍历map，max表示当前mostfrequent结点的次数
+            if(max<p.second){
+                ans.clear();//清空vector
+                ans.push_back(p.first);
+                max=p.second;
+            }else if(max==p.second){
+                ans.push_back(p.first);
+            }
+        }
+        return ans;
+    }
+    int findSum(TreeNode* root,map<int,int>&tmp){
+        if(root==NULL){
+            return 0;
+        }else{
+            root->val+=findSum(root->left,tmp)+findSum(root->right,tmp);
+            if(tmp.find(root->val)!=tmp.end()){
+                tmp[root->val]++;//不是第一次出现++
+            }else{
+                tmp[root->val]=1;//第一次出现初始化为1
+            }
+            return root->val;
+        }
+        
+    }
+    
+};
