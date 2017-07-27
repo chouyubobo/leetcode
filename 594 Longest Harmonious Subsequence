@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        unordered_map<int,int>res;//<integer,count>
+        for(auto num:nums){
+            res[num]++;
+        }
+        int ans=0;
+        for(auto r:res){
+            if(res.find(r.first+1)!=res.end()){
+                ans=max(ans,r.second+res[r.first+1]);
+            }
+        }
+        return ans;
+    }
+};
