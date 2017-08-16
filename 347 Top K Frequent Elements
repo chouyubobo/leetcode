@@ -1,0 +1,25 @@
+class Solution {
+public:
+    static bool cmp(pair<int,int>&m,pair<int,int>&n){
+        return m.second<n.second?true:false;
+    }
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int>ans;
+        map<int,int>map;
+        for(int n:nums){
+            map[n]++;
+        }
+        vector<pair<int,int>>heap;
+        for(auto n:map){
+            heap.push_back(n);
+        }
+        make_heap(heap.begin(),heap.end(),cmp);
+        while(k--){
+            pop_heap(heap.begin(),heap.end(),cmp);
+            int n=heap.size()-1;
+            ans.push_back(heap[n].first);
+            heap.pop_back();
+        }
+        return ans;
+    }
+};
